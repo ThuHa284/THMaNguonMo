@@ -1,0 +1,26 @@
+name: Deploy Website via FTP
+
+on:
+  push:
+    branches:
+      - main   # Deploy khi push lên nhánh main
+
+jobs:
+  ftp-deploy:
+    name: Upload to FTP Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Deploy files to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_AD }}
+          username: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PW }}
+          server-dir: /www.thuha.somee.com/   # Thư mục hosting Somee
+          local-dir: ./                       # Thư mục gốc của repo (chứa index.html)
+          protocol: ftp
+          timeout: 300000
